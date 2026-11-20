@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ComponentProps, type FormEvent } from "react";
+import { useEffect, useRef, useMemo, useState, type ComponentProps, type FormEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   ArrowDown,
@@ -36,17 +36,18 @@ const platformLabels = {
   other: "Web",
 } as const;
 
-// <img> that falls back to YouTube's standard thumbnail when the HD one does not exist.
+// YouTube answers a missing HD thumbnail with a small grey 120px placeholder, which
+// does not always trigger onError, so the image's real width is checked as well.
 function Thumb(props: ComponentProps<"img">) {
-  return (
-    <img
-      {...props}
-      onError={(e) => {
-        const el = e.currentTarget;
-        if (el.src.includes("maxresdefault")) el.src = el.src.replace("maxresdefault", "hqdefault");
-      }}
-    />
-  );
+  const ref = useRef<HTMLImageElement>(null);
+  const fallback = (el: HTMLImageElement) => {
+    if (el.src.includes("maxresdefault") && el.complete && el.naturalWidth <= 120) {
+      el.src = el.src.replace("maxresdefault", "hqdefault");
+    }
+  };
+  // The image can finish loading before React attaches onLoad, so check once on mount too.
+  useEffect(() => { if (ref.current) fallback(ref.current); }, [props.src]);
+  return <img {...props} ref={ref} onLoad={e => fallback(e.currentTarget)} onError={e => fallback(e.currentTarget)} />;
 }
 
 function EmptyState({ label }: { label: string }) {
@@ -350,9 +351,7 @@ function ProjectCard({
       <Button
         variant="project"
         onClick={onOpen}
-        className={cn(
-          "relative block w-full overflow-hidden text-left",
-          project.format === "vertical" ? "aspect-[4/3]" : large ? "aspect-[16/8]" : "aspect-[4/3]",
+        className={cn("relative block h-auto w-full overflow-hidden p-0 text-left", project.format === "vertical" ? "aspect-[4/3]" : large ? "aspect-[16/8]" : "aspect-[4/3]",
         )}
         aria-label={`View ${project.title}`}
       >

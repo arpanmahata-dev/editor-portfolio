@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "YOUR NAME",
+  name: "cpt.COSMIC",
   role: "Video Editor & Motion Designer",
   accent: "oklch(0.91 0.22 120)",
   showreelUrl: "",

@@ -127,9 +127,8 @@ function Header() {
       )}
     >
       <div className="mx-auto flex max-w-[1500px] items-center justify-between px-5 md:px-8">
-        <a href="#top" className="font-display text-lg font-black uppercase">
-          {siteConfig.name}
-          <span className="text-primary">.</span>
+        <a href="#top" className="font-display text-lg font-black">
+          cpt<span className="text-primary">.</span>COSMIC
         </a>
         <nav className="hidden items-center gap-8 lg:flex">
           {nav.map((item) => (
@@ -984,9 +983,8 @@ function Footer() {
     <footer className="border-t border-border bg-background px-5 py-10 md:px-8">
       <div className="mx-auto flex max-w-[1500px] flex-col justify-between gap-8 md:flex-row md:items-end">
         <div>
-          <p className="font-display text-3xl font-black uppercase">
-            {siteConfig.name}
-            <span className="text-primary">.</span>
+          <p className="font-display text-3xl font-black">
+            cpt<span className="text-primary">.</span>COSMIC
           </p>
           <p className="mt-2 text-sm text-muted-foreground">Video Editor & Motion Designer</p>
         </div>

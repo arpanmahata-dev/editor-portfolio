@@ -46,8 +46,17 @@ function Thumb(props: ComponentProps<"img">) {
     }
   };
   // The image can finish loading before React attaches onLoad, so check once on mount too.
-  useEffect(() => { if (ref.current) fallback(ref.current); }, [props.src]);
-  return <img {...props} ref={ref} onLoad={e => fallback(e.currentTarget)} onError={e => fallback(e.currentTarget)} />;
+  useEffect(() => {
+    if (ref.current) fallback(ref.current);
+  }, [props.src]);
+  return (
+    <img
+      {...props}
+      ref={ref}
+      onLoad={(e) => fallback(e.currentTarget)}
+      onError={(e) => fallback(e.currentTarget)}
+    />
+  );
 }
 
 function EmptyState({ label }: { label: string }) {
@@ -351,7 +360,9 @@ function ProjectCard({
       <Button
         variant="project"
         onClick={onOpen}
-        className={cn("relative block h-auto w-full overflow-hidden p-0 text-left", project.format === "vertical" ? "aspect-[4/3]" : large ? "aspect-[16/8]" : "aspect-[4/3]",
+        className={cn(
+          "relative block h-auto w-full overflow-hidden p-0 text-left",
+          project.format === "vertical" ? "aspect-[4/3]" : large ? "aspect-[16/8]" : "aspect-[4/3]",
         )}
         aria-label={`View ${project.title}`}
       >
